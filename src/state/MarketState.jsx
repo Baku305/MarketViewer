@@ -1,18 +1,47 @@
 
 import {createSlice} from '@reduxjs/toolkit'
-import { UseWebSocket } from '../useWebSocket'
+
 
 export const marketState = createSlice({
+  
   name: 'market',
   initialState: [],
   reducers: {
-    filter: (state,action) => state.filter((s) => s.includes(action.payload)),
-    sort : (state,action) => state.sort(),
+
+    filter: (state,action) => state.forEach((s) => console.log(s.symbol.includes(action.payload.toUpperCase()))),
+    
     reset: (state,action) => [],
+
     set: (state,action) => {
       if (state !== undefined) {
        return state = action.payload
-     }}
+     }},
+
+    sortAZ : (state,action) => {
+    
+      return state.slice().sort(function(a, b) {
+          var nameA = a.symbol,
+            nameB = b.symbol
+          if (nameA < nameB)
+            return -1
+          if (nameA > nameB)
+            return 1
+          return 0
+        })
+    },
+
+    sortZA : (state,action) => {
+      return state.slice().sort(function(a, b) {
+            var nameA = a.symbol,
+              nameB = b.symbol
+            if (nameA > nameB)
+              return -1
+            if (nameA < nameB)
+              return 1
+            return 0
+          })
+      },
+
   }
 })
 
@@ -21,10 +50,13 @@ export const socketState = createSlice({
   name : 'socket',
   initialState:[],
   reducers:{
+
     socketTrade: (state,action) => {
       if (action.payload !== undefined & action.payload.result !== null) {
-        return state = [...action?.payload]
+        console.log(action.payload);
+        return state = action?.payload
       }
+      
       }
   }
 })
