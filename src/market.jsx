@@ -125,7 +125,7 @@ export function Market() {
 
     {
       name: "24h Change",
-      selector: (row) => row.priceChangePercent?.includes("-") ? <div className="text-red-900 text-right font-bold w-14">{row.priceChangePercent} %</div> : <div className="text-green-900 text-right font-bold w-14">{row.priceChangePercent} %</div>,
+      selector: (row) => row.priceChangePercent?.includes("-") ? <div className="text-red-900 text-right font-bold w-20 before:content-['▼']">{row.priceChangePercent} %</div> : <div className="text-green-900 text-right font-bold w-20 before:content-['▲']">{row.priceChangePercent} %</div>,
       sortable: true,
        sortFunction: (a, b) => {
         const nameA = a.priceChangePercent;
@@ -141,7 +141,7 @@ export function Market() {
         display: "flex",
         justifyContent: "flex-start",
         minWidth: "fit-content",
-        padding : "0",
+        padding : "5px",
         width: "100%"
       }
     },
@@ -180,6 +180,7 @@ export function Market() {
         subHeaderComponent={subHeaderComponentMemo}
         persistTableHead
         customStyles={customStyles}
+		    pointerOnHover
       />
     </div>
   );
