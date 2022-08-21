@@ -1,0 +1,13 @@
+.listWrapper{
+ animation: enter 0.5s;
+}
+
+@keyframes enter {
+ from {right:-100%}
+ to{right:0}
+}
+
+.sc-jqUVSM:hover{
+ background-color: rgb(15 23 42);
+ color: aliceblue;
+}

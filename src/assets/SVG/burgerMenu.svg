@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 110.9 92.2" style="enable-background:new 0 0 110.9 92.2;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:url(#SVGID_00000142160225631925427520000018369659517229275814_);}
+	.st2{fill:#2D2042;}
+</style>
+<g id="Livello_2_00000160904899040480352250000016749575916167402659_">
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="90.9921" y1="48.4524" x2="50.2417" y2="48.4524" gradientTransform="matrix(1 0 0 -1 0 94)">
+		<stop  offset="0" style="stop-color:#FFE496;stop-opacity:0"/>
+		<stop  offset="1" style="stop-color:#FFDA0B"/>
+	</linearGradient>
+	<path class="st0" d="M110.9,14.9v61.2c-17.7,13.1-43.1,10-56.7-6.9S43.7,28,61.3,14.9C75.9,4.1,96.3,4.1,110.9,14.9z"/>
+	
+		<linearGradient id="SVGID_00000081621590488067575750000012824433206119943871_" gradientUnits="userSpaceOnUse" x1="86.4448" y1="47.89" x2="36.3617" y2="47.89" gradientTransform="matrix(1 0 0 -1 0 94)">
+		<stop  offset="0" style="stop-color:#FFE496;stop-opacity:0"/>
+		<stop  offset="1" style="stop-color:#FFDA0B"/>
+	</linearGradient>
+	<path style="fill:url(#SVGID_00000081621590488067575750000012824433206119943871_);" d="M110.9,12.6v67c0,7-5.9,12.6-13.2,12.6
+		l0,0H59.9c-26.9-13.8-37-46-22.6-71.7C42.1,12,49.2,4.9,57.8,0h39.9C105,0,110.9,5.6,110.9,12.6C110.9,12.6,110.9,12.6,110.9,12.6z
+		"/>
+	<path class="st2" d="M93,50.2c-1.8,0-3.6,0.6-5.1,1.7L83,46.7l2.4-7.3c0.6,0.1,1.2,0.2,1.8,0.2c4.7,0,8.5-3.6,8.5-8.1
+		c0-4.5-3.8-8.2-8.5-8.2c-4.7,0-8.5,3.6-8.5,8.1c0,3.3,2.1,6.2,5.2,7.5l-2.4,7.3l-7.6,1.5c-1.5-4.2-6.2-6.5-10.6-5.1
+		c-4.4,1.4-6.8,5.9-5.3,10.2c1.5,4.2,6.2,6.5,10.6,5.1c3.5-1.1,5.8-4.2,5.7-7.8c0-0.3,0-0.6-0.1-0.9l7.6-1.5l4.9,5.2
+		c-1.4,1.5-2.2,3.5-2.2,5.5c0,4.5,3.8,8.1,8.5,8.1c4.7,0,8.5-3.7,8.5-8.2C101.5,53.9,97.7,50.2,93,50.2z"/>
+</g>
+</svg>

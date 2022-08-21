@@ -8,5 +8,5 @@ const rootReducer = combineReducers({
   market: marketState.reducer,
 });
 
-export const store = createStore(marketState.reducer);
+
 export const multiStore = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunkMiddleware)));
