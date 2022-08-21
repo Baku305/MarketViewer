@@ -40,9 +40,9 @@ export function Market() {
   const priceViewer = (s) => {
     const found = symbols24h.find((p) => s === p.symbol);
     return (
-      found && (
-        <div className="font-bold text-yellow-500">{parseFloat(found.askPrice).toFixed(6)}</div>
-      )
+      found && found.askPrice < 1 ? 
+        <div className="font-bold text-yellow-500 w-full text-right">{parseFloat(found.askPrice).toFixed(6)}</div>
+       :  <div className="font-bold text-yellow-500 w-full text-right">{parseFloat(found.askPrice).toFixed(2)}</div>
     );
   };
 
@@ -84,7 +84,7 @@ export function Market() {
     {
       name: "Market",
       selector: (row) => (
-        <div className="flex items-center">
+        <div className="flex justify-between w-full">
           <div >
             <img className = "h-5 mr-3" src={`//logo.chainbit.xyz/${row.baseAsset}`} alt="" />
           </div>
@@ -115,9 +115,9 @@ export function Market() {
 
     {
       name: "Price",
-      selector: (row) => <div className="flex items-center">
-      <div class="w-10">
-        <img className = "h-5 mr-3" src={`//logo.chainbit.xyz/${row.quoteAsset}`} alt="" />
+      selector: (row) => <div className="flex justify-between w-full ">
+      <div class="w-12">
+        <img className = "h-5" src={`//logo.chainbit.xyz/${row.quoteAsset}`} alt="" />
       </div>
       {row.price}
     </div>
@@ -125,7 +125,7 @@ export function Market() {
 
     {
       name: "24h Change",
-      selector: (row) => row.priceChangePercent?.includes("-") ? <span className="text-red-900 text-right">{row.priceChangePercent} %</span> : <span className="text-green-900 text-right">{row.priceChangePercent}%</span>,
+      selector: (row) => row.priceChangePercent?.includes("-") ? <div className="text-red-900 text-right font-bold w-14">{row.priceChangePercent} %</div> : <div className="text-green-900 text-right font-bold w-14">{row.priceChangePercent} %</div>,
       sortable: true,
        sortFunction: (a, b) => {
         const nameA = a.priceChangePercent;
@@ -134,6 +134,24 @@ export function Market() {
       },
     },
   ];
+
+  const customStyles = {
+    cells: {
+      style: {
+        display: "flex",
+        justifyContent: "flex-start",
+        minWidth: "fit-content",
+        padding : "0",
+        width: "100%"
+      }
+    },
+    columns: {
+      style: {
+        minWidth: "fit-content"
+      }
+    }
+  }
+
   useEffect(() => {
     if (symbolsInfo && symbols24h) {
       const MarketMap = symbolsInfo.symbols
@@ -153,7 +171,7 @@ export function Market() {
   });
 
   return (
-    <div className="2xl:container mx-auto border-2 border-t-0  border-slate-900  overflow-x-hidden">
+    <div className="2xl:container mx-auto border-2 border-t-0 border-slate-900  overflow-x-hidden">
       <DataTable
         columns={columns}
         data={filteredItems}
@@ -161,6 +179,7 @@ export function Market() {
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
         persistTableHead
+        customStyles={customStyles}
       />
     </div>
   );

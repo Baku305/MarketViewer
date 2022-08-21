@@ -24,7 +24,7 @@ export function Assets() {
     {
       name: "Base Asset",
       selector: (row) => (
-        <div className="flex items-center">
+        <div className="flex justify-between w-full">
           <div>
             <img className="h-5 mr-3" src={`//logo.chainbit.xyz/${row.baseAsset}`} alt="" />
           </div>
