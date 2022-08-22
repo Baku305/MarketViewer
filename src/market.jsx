@@ -6,6 +6,8 @@ import DataTable from "react-data-table-component";
 import { useFetchCryptoApi, useFetchCryptoPrice } from "./customhooks/useFetchApi";
 import { useParams } from "react-router-dom";
 import searchLogo from "./assets/SVG/searchIcon.svg";
+import tradeArrows from "./assets/SVG/tradeArrows.svg";
+import noFoundAsset from "./assets/SVG/noFoundAsset.svg";
 import "./market.css";
 
 const binancePublicEndpoint = "https://api.binance.com";
@@ -16,12 +18,13 @@ const stremSoketEndPoint = "wss://stream.binance.com:9443/stream";
 const IconEndPoint = "https://cryptoicons.org/api/:style/:currency/:size";
 
 export function Market() {
-
   const { base_asset = "" } = useParams();
 
   const dispatch = useDispatch();
 
   const [filterText, setFilterText] = useState("");
+
+  const [pending, setPending] = useState(true);
 
   const {
     symbols: symbols24h,
@@ -31,29 +34,18 @@ export function Market() {
   } = useFetchCryptoPrice(tikers24h);
 
   const {
+    symbols: symbolsPrice,
+    error: errorPrice,
+    isLoading: isLoadingPrice,
+    onRefresh: onRefreshPrice,
+  } = useFetchCryptoPrice(tickersEndpoint);
+
+  const {
     symbols: symbolsInfo,
     error: errorInfo,
     isLoading: isLoadingInfo,
     onRefresh: onRefreshInfo,
   } = useFetchCryptoApi(exchangeInfoEndpoint);
-
-  const priceViewer = (s) => {
-    const found = symbols24h.find((p) => s === p.symbol);
-    return (
-      found && found.askPrice < 1 ? 
-        <div className="font-bold text-yellow-500 w-full text-right">{parseFloat(found.askPrice).toFixed(6)}</div>
-       :  <div className="font-bold text-yellow-500 w-full text-right">{parseFloat(found.askPrice).toFixed(2)}</div>
-    );
-  };
-
-  const Change24hViewer = (s) => {
-    const found = symbols24h.find((p) => s === p.symbol);
-    return found && parseFloat(found.priceChangePercent).toFixed(2)/*found.priceChangePercent.includes("-") ? (
-      <div className="text-red-700">{parseFloat(found.priceChangePercent).toFixed(2)}%</div>
-    ) : (
-      <div className="text-green-700">{parseFloat(found.priceChangePercent).toFixed(2)}%</div>
-    );*/
-  };
 
   const filteredItems = multiStore.getState().market.filter((item) => {
     return item.symbol && item.symbol.includes(filterText.toUpperCase());
@@ -80,14 +72,17 @@ export function Market() {
   }, []);
 
 
+
   const columns = [
     {
       name: "Market",
       selector: (row) => (
         <div className="flex justify-between w-full">
-          <div >
-            <img className = "h-5 mr-3" src={`//logo.chainbit.xyz/${row.baseAsset}`} alt="" />
-          </div>
+          <img
+        className="h-5 mr-3"
+        src = {`//logo.chainbit.xyz/${row.baseAsset}`}
+        alt = "🉑"
+      />
           {row.symbol}
         </div>
       ),
@@ -104,33 +99,52 @@ export function Market() {
     {
       name: "Base Asset",
       selector: (row) => row.baseAsset,
-      sortable: true
+      sortable: true,
     },
 
     {
       name: "Quote Asset",
       selector: (row) => row.quoteAsset,
-      sortable: true
+      sortable: true,
     },
 
     {
       name: "Price",
-      selector: (row) => <div className="flex justify-between w-full ">
-      <div class="w-12">
-        <img className = "h-5" src={`//logo.chainbit.xyz/${row.quoteAsset}`} alt="" />
-      </div>
-      {row.price}
-    </div>
+      selector: (row) => (
+        <div className="flex justify-between w-full ">
+          <div className="w-12">
+            <img className="h-5" src={`//logo.chainbit.xyz/${row.quoteAsset}`} alt="🉑" />
+          </div>
+          {row.price < 1 ? (
+            <div className="font-bold text-yellow-500 w-full text-right">
+              {parseFloat(row.price).toFixed(6)}
+            </div>
+          ) : (
+            <div className="font-bold text-yellow-500 w-full text-right">
+              {parseFloat(row.price).toFixed(2)}
+            </div>
+          )}
+        </div>
+      ),
     },
 
     {
       name: "24h Change",
-      selector: (row) => row.priceChangePercent?.includes("-") ? <div className="text-red-900 text-right font-bold w-20 before:content-['▼']">{row.priceChangePercent} %</div> : <div className="text-green-900 text-right font-bold w-20 before:content-['▲']">{row.priceChangePercent} %</div>,
+      selector: (row) =>
+        row.priceChangePercent?.includes("-") ? (
+          <div className="text-red-900 text-right font-bold w-20 before:content-['▼']">
+            {row.priceChangePercent} %
+          </div>
+        ) : (
+          <div className="text-green-900 text-right font-bold w-20 before:content-['▲']">
+            {row.priceChangePercent} %
+          </div>
+        ),
       sortable: true,
-       sortFunction: (a, b) => {
+      sortFunction: (a, b) => {
         const nameA = a.priceChangePercent;
         const nameB = b.priceChangePercent;
-        return nameA - nameB
+        return nameA - nameB;
       },
     },
   ];
@@ -141,18 +155,37 @@ export function Market() {
         display: "flex",
         justifyContent: "flex-start",
         minWidth: "fit-content",
-        padding : "5px",
-        width: "100%"
-      }
+        padding: "5px",
+        width: "100%",
+      },
     },
     columns: {
       style: {
-        minWidth: "fit-content"
-      }
-    }
-  }
+        minWidth: "fit-content",
+      },
+    },
+  };
 
   useEffect(() => {
+    const PriceMerger = (s) => {
+      const found = symbols24h.find((p) => s === p.symbol);
+      const priceFound = symbolsPrice.find((p) => s === p.symbol);
+      return (
+        found &&
+        priceFound && {
+          price: priceFound.price,
+          priceChangePercent: parseFloat(found.priceChangePercent).toFixed(2),
+          volume: found.volume,
+          priceChange: found.priceChange,
+          lowPrice: found.lowPrice,
+          askPrice: found.askPrice,
+          askQty: found.askQty,
+          bidPrice: found.bidPrice,
+          bidQty: found.bidQty,
+        }
+      );
+    };
+
     if (symbolsInfo && symbols24h) {
       const MarketMap = symbolsInfo.symbols
         .filter((s) => s.status === "TRADING")
@@ -160,15 +193,57 @@ export function Market() {
           (symbol) =>
             (symbol = {
               ...symbol,
-              price: priceViewer(symbol.symbol),
-              priceChangePercent: Change24hViewer(symbol.symbol),
+              ...PriceMerger(symbol.symbol),
             })
         )
         .filter((s) => s.baseAsset.toLowerCase().includes(base_asset.toLowerCase()));
       dispatch(marketState.actions.set(MarketMap));
-      console.log(multiStore.getState());
+      console.log(symbolsPrice);
+      setPending(false);
     }
-  });
+  }, [base_asset, dispatch, symbols24h, symbolsInfo, symbolsPrice]);
+
+  const ExpandedComponent = ({ data }) => (
+    <div>
+      <div className="flex pl-20 pt-4 gap-4">
+        <img className="h-10 w-10" src={`//logo.chainbit.xyz/${data.baseAsset}`} alt="🉑" />
+        <img className="h-10 w-10" src={tradeArrows} alt="" />
+        <img className="h-10 w-10" src={`//logo.chainbit.xyz/${data.quoteAsset}`} alt="🉑" />
+      </div>
+      <div className="text-xs p-4 pl-16">
+        <div className="flex justify-between">
+          <div className="p-2 w-full">
+            <div className="p-1 font-bold">VOLUME</div>
+            <div className="p-1">{parseFloat(data.volume).toFixed(4)}</div>
+          </div>
+          <div className="p-2 w-full">
+            <div className="p-1 font-bold">PRICE CHANGE</div>
+            <div className="p-1">{parseFloat(data.priceChange).toFixed(6)}</div>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="p-2 w-full">
+            <div className="p-1 text-red-900 font-bold">ASK PRICE</div>
+            <div className="p-1">{parseFloat(data.askPrice).toFixed(6)}</div>
+          </div>
+          <div className="p-2 w-full">
+            <div className="p-1 text-red-900 font-bold">ASK QUANTITY</div>
+            <div className="p-1">{parseFloat(data.askQty).toFixed(4)}</div>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="p-2 w-full">
+            <div className="p-1 text-green-900 font-bold">BID PRICE</div>
+            <div className="p-1">{parseFloat(data.bidQty).toFixed(4)}</div>
+          </div>
+          <div className="p-2 w-full">
+            <div className="p-1 text-green-900 font-bold">BID QUANTITY</div>
+            <div className="p-1">{parseFloat(data.bidPrice).toFixed(6)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="2xl:container mx-auto border-2 border-t-0 border-slate-900  overflow-x-hidden">
@@ -180,7 +255,10 @@ export function Market() {
         subHeaderComponent={subHeaderComponentMemo}
         persistTableHead
         customStyles={customStyles}
-		    pointerOnHover
+        pointerOnHover
+        progressPending={pending}
+        expandableRows
+        expandableRowsComponent={ExpandedComponent}
       />
     </div>
   );
