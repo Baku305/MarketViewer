@@ -151,7 +151,7 @@ export function Market() {
     },
   };
 
-  const options = [ {value: "ALL ASSETS",label: <Link to= {`/`} >ALL</Link>} ,...multiStore.getState().asset.map(symbol => {return { value : symbol.baseAsset , label : <Link to= {`/${symbol.baseAsset.toLowerCase()}`} >{symbol.baseAsset}</Link>}})]
+  const options = [ {value: "ALL ASSETS",label: <Link to= {`/`} >ALL ASSETS</Link>} ,...multiStore.getState().asset.map(symbol => {return { value : symbol.baseAsset , label : <Link to= {`/${symbol.baseAsset.toLowerCase()}`} >{symbol.baseAsset}</Link>}})]
 
   const subHeaderComponentMemo = useMemo(() => {
         return (
