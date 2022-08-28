@@ -7,13 +7,10 @@ import { useFetchCryptoApi, useFetchCryptoPrice } from "./customhooks/useFetchAp
 import { Link, useParams } from "react-router-dom";
 import searchLogo from "./assets/SVG/searchIcon.svg";
 import tradeArrows from "./assets/SVG/tradeArrows.svg";
-import noFoundAsset from "./assets/SVG/noFoundAsset.svg";
 import "./market.css";
 import Select from "react-select";
-import AsyncSelect from 'react-select/async';
 import { AssetState } from "./state/AssetState";
 import { filteredArray, numberOfMarkets } from "./Asset";
-import { isAllOf } from "@reduxjs/toolkit";
 
 const binancePublicEndpoint = "https://api.binance.com";
 const exchangeInfoEndpoint = binancePublicEndpoint + "/api/v3/exchangeInfo";
