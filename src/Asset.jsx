@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { multiStore } from "./state/store";
 import { marketState } from "./state/MarketState";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { useFetchCryptoApi } from "./customhooks/useFetchApi";
 import { Link } from "react-router-dom";
 import searchLogo from "./assets/SVG/searchIcon.svg";
+import { AssetState } from "./state/AssetState";
 
 const binancePublicEndpoint = "https://api.binance.com";
 const exchangeInfoEndpoint = binancePublicEndpoint + "/api/v3/exchangeInfo";
@@ -13,8 +14,28 @@ const tickersEndpoint = binancePublicEndpoint + "/api/v3/ticker/price";
 const tikers24h = binancePublicEndpoint + "/api/v3/ticker/24hr";
 const stremSoketEndPoint = "wss://stream.binance.com:9443/stream";
 
+ export const filteredArray = (array) =>
+    array.filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return (
+        index ===
+        array.findIndex((obj) => {
+          return JSON.stringify(obj) === _value;
+        })
+      );
+    });
+
+  export const numberOfMarkets = (baseAsset) => {
+    const a = multiStore.getState().market.filter((m) => m.baseAsset === baseAsset.toUpperCase());
+
+    return {
+      baseAsset: baseAsset,
+      markets: a.length,
+    };
+  };
+
+  
 export function Assets() {
-  const [assets, setAssets] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -54,27 +75,9 @@ export function Assets() {
     onRefresh: onRefreshInfo,
   } = useFetchCryptoApi(exchangeInfoEndpoint);
 
-  const numberOfMarkets = (baseAsset) => {
-    const a = multiStore.getState().market.filter((m) => m.baseAsset === baseAsset.toUpperCase());
 
-    return {
-      baseAsset: baseAsset,
-      markets: a.length,
-    };
-  };
 
-  const filteredArray = (array) =>
-    array.filter((value, index) => {
-      const _value = JSON.stringify(value);
-      return (
-        index ===
-        array.findIndex((obj) => {
-          return JSON.stringify(obj) === _value;
-        })
-      );
-    });
-
-  const filteredItems = assets.filter((item) => {
+  const filteredItems = useSelector(state => state.asset).filter((item) => {
     return item.baseAsset && item.baseAsset.includes(filterText.toUpperCase());
   });
 
@@ -102,8 +105,7 @@ export function Assets() {
     if (symbolsInfo) {
       dispatch(marketState.actions.set(symbolsInfo.symbols.filter((s) => s.status === "TRADING")));
       const a = multiStore.getState().market.map((s) => numberOfMarkets(s.baseAsset));
-      console.log(multiStore.getState());
-      setAssets(filteredArray(a));
+      dispatch(AssetState.actions.set(filteredArray(a)))
     }
   }, [dispatch, symbolsInfo]);
 
