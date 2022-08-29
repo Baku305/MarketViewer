@@ -170,7 +170,7 @@ export function Market() {
           </label>
           {multiStore.getState().asset.length !== 0 && (
             <Select
-            className="w-36"
+            className="w-40"
               options={options}
               placeholder={base_asset === "" ? "ALL ASSETS" : base_asset.toUpperCase()}
             />
