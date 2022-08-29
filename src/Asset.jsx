@@ -84,6 +84,7 @@ export function Assets() {
   const subHeaderComponentMemo = useMemo(() => {
     return (
       <>
+      <div className="flex justify-between w-full">
         <label className="relative block">
           <span className="sr-only">Search</span>
           <span className="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -97,6 +98,7 @@ export function Assets() {
             name="search"
           />
         </label>
+      </div>
       </>
     );
   }, []);
