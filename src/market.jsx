@@ -151,6 +151,7 @@ export function Market() {
       };
     }),
   ];
+  
   const subHeaderComponentMemo = useMemo(() => {
     return (
       <>
@@ -214,8 +215,11 @@ export function Market() {
         .filter((s) => s.baseAsset.toLowerCase().includes(base_asset.toLowerCase()));
       dispatch(marketState.actions.set(MarketMap));
       setPending(false);
+      const a = symbolsInfo.symbols
+      .filter((s) => s.status === "TRADING").map((s) => numberOfMarkets(s.baseAsset));
+      dispatch(AssetState.actions.set(filteredArray(a)))
     }
-  }, [base_asset, dispatch, symbols24h, symbolsInfo, symbolsPrice]);
+  });
 
   const ExpandedComponent = ({ data }) => (
     <div>

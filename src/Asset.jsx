@@ -103,13 +103,13 @@ export function Assets() {
     );
   }, []);
 
-  useEffect(() => {
-    if (symbolsInfo) {
-      dispatch(marketState.actions.set(symbolsInfo.symbols.filter((s) => s.status === "TRADING")));
-      const a = multiStore.getState().market.map((s) => numberOfMarkets(s.baseAsset));
-      dispatch(AssetState.actions.set(filteredArray(a)))
-    }
-  }, [dispatch, symbolsInfo]);
+  // useEffect(() => {
+  //   if (symbolsInfo) {
+  //     //dispatch(marketState.actions.set(symbolsInfo.symbols.filter((s) => s.status === "TRADING")));
+  //     const a = multiStore.getState().market.map((s) => numberOfMarkets(s.baseAsset));
+  //     dispatch(AssetState.actions.set(filteredArray(a)))
+  //   }
+  // }, [dispatch, symbolsInfo]);
 
   return (
     <div className="box-border 2xl:container mx-auto">
