@@ -151,7 +151,7 @@ export function Market() {
       };
     }),
   ];
-  
+
   const subHeaderComponentMemo = useMemo(() => {
     return (
       <>
@@ -163,20 +163,12 @@ export function Market() {
             </span>
             <input
               onKeyUp={(e) => setFilterText(e.target.value)}
-              className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 text-sm"
+              className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 text-sm"
               placeholder="Search ..."
               type="text"
               name="search"
             />
           </label>
-          <div className="h-full">
-            <Select
-            className="w-40 h-full sm:text-sm "
-              options={options}
-              placeholder={base_asset === "" ? "ALL ASSETS" : base_asset.toUpperCase()}
-            />
-          </div>
-          
         </div>
       </>
     );
@@ -216,10 +208,11 @@ export function Market() {
       dispatch(marketState.actions.set(MarketMap));
       setPending(false);
       const a = symbolsInfo.symbols
-      .filter((s) => s.status === "TRADING").map((s) => numberOfMarkets(s.baseAsset));
-      dispatch(AssetState.actions.set(filteredArray(a)))
+        .filter((s) => s.status === "TRADING")
+        .map((s) => numberOfMarkets(s.baseAsset));
+      dispatch(AssetState.actions.set(filteredArray(a)));
     }
-  });
+  },[dispatch,symbols24h,symbolsInfo,symbolsPrice,base_asset]);
 
   const ExpandedComponent = ({ data }) => (
     <div>
@@ -264,20 +257,38 @@ export function Market() {
   );
 
   return (
-    <div className="2xl:container mx-auto border-2 border-t-0 border-slate-900  overflow-x-hidden">
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        pagination
-        subHeader
-        subHeaderComponent={subHeaderComponentMemo}
-        persistTableHead
-        customStyles={customStyles}
-        pointerOnHover
-        progressPending={pending}
-        expandableRows
-        expandableRowsComponent={ExpandedComponent}
-      />
+    <div>
+      <div className="2xl:container mx-auto border-2 border-t-0 border-slate-900  overflow-x-hidden">
+      <div className="h-full pl-6 pt-1">
+        <Select
+          className="w-40 h-full sm:text-sm rounded-md"
+          options={options}
+          placeholder={base_asset === "" ? "ALL ASSETS" : base_asset.toUpperCase()}
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 0,
+            colors: {
+              ...theme.colors,
+              primary25: 'trasparent',
+              primary: 'black',
+            },
+          })}          
+        />
+      </div>
+        <DataTable
+          columns={columns}
+          data={filteredItems}
+          pagination
+          subHeader
+          subHeaderComponent={subHeaderComponentMemo}
+          persistTableHead
+          customStyles={customStyles}
+          pointerOnHover
+          progressPending={pending}
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
+        />
+      </div>
     </div>
   );
 }
