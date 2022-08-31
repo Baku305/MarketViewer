@@ -4,7 +4,7 @@ import { marketState } from "./state/MarketState";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { useFetchCryptoApi, useFetchCryptoPrice } from "./customhooks/useFetchApi";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import searchLogo from "./assets/SVG/searchIcon.svg";
 import tradeArrows from "./assets/SVG/tradeArrows.svg";
 import "./market.css";
@@ -23,6 +23,8 @@ export function Market() {
   const { base_asset = "" } = useParams();
 
   const dispatch = useDispatch();
+
+  const location = useLocation()
 
   const [filterText, setFilterText] = useState("");
 
@@ -142,8 +144,9 @@ export function Market() {
     },
   };
 
+
   const options = [
-    { value: "ALL ASSETS", label: <Link to={`/`}>ALL ASSETS</Link> },
+    { value: "ALL ASSETS", label: <Link to={`/`}>ALL BASE ASSETS</Link> },
     ...multiStore.getState().asset.map((symbol) => {
       return {
         value: symbol.baseAsset,
@@ -169,10 +172,44 @@ export function Market() {
               name="search"
             />
           </label>
+          {location.pathname === "/" ?  
+          <div className="h-full pl-6">
+            <Select
+              isDisabled
+              className="w-48 h-full sm:text-sm rounded-md"
+              options={options}
+              placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 0,
+                colors: {
+                  ...theme.colors,
+                  primary25: 'gray',
+                  primary: 'black',
+                },
+              })}
+            />
+          </div> : <div className="h-full pl-6">
+            <Select
+              className="w-48 h-full sm:text-sm rounded-md"
+              options={options}
+              placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 0,
+                colors: {
+                  ...theme.colors,
+                  primary25: 'gray',
+                  primary: 'black',
+                },
+              })}
+            />
+          </div>
+          }
         </div>
       </>
     );
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     const PriceMerger = (s) => {
@@ -207,12 +244,12 @@ export function Market() {
         .filter((s) => s.baseAsset.toLowerCase().includes(base_asset.toLowerCase()));
       dispatch(marketState.actions.set(MarketMap));
       setPending(false);
-      const a = symbolsInfo.symbols
-        .filter((s) => s.status === "TRADING")
-        .map((s) => numberOfMarkets(s.baseAsset));
-      dispatch(AssetState.actions.set(filteredArray(a)));
+      // const a = symbolsInfo.symbols
+      //   .filter((s) => s.status === "TRADING")
+      //   .map((s) => numberOfMarkets(s.baseAsset));
+      // dispatch(AssetState.actions.set(filteredArray(a)));
     }
-  },[dispatch,symbols24h,symbolsInfo,symbolsPrice,base_asset]);
+  }, [dispatch, symbols24h, symbolsInfo, symbolsPrice, base_asset]);
 
   const ExpandedComponent = ({ data }) => (
     <div>
@@ -259,22 +296,6 @@ export function Market() {
   return (
     <div>
       <div className="2xl:container mx-auto border-2 border-t-0 border-slate-900  overflow-x-hidden">
-      <div className="h-full pl-6 pt-1">
-        <Select
-          className="w-40 h-full sm:text-sm rounded-md"
-          options={options}
-          placeholder={base_asset === "" ? "ALL ASSETS" : base_asset.toUpperCase()}
-          theme={(theme) => ({
-            ...theme,
-            borderRadius: 0,
-            colors: {
-              ...theme.colors,
-              primary25: 'trasparent',
-              primary: 'black',
-            },
-          })}          
-        />
-      </div>
         <DataTable
           columns={columns}
           data={filteredItems}
