@@ -9,8 +9,6 @@ import searchLogo from "./assets/SVG/searchIcon.svg";
 import tradeArrows from "./assets/SVG/tradeArrows.svg";
 import "./market.css";
 import Select from "react-select";
-import { AssetState } from "./state/AssetState";
-import { filteredArray, numberOfMarkets } from "./Asset";
 
 const binancePublicEndpoint = "https://api.binance.com";
 const exchangeInfoEndpoint = binancePublicEndpoint + "/api/v3/exchangeInfo";
@@ -181,7 +179,7 @@ export function Market() {
                 <img className="" src={`//logo.chainbit.xyz/${base_asset}`} alt="" />
               </div>
               <Select
-                className="w-48 h-full sm:text-sm rounded-md"
+                className="w-52 h-full text-sm rounded-md"
                 options={options}
                 placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
                 theme={(theme) => ({
