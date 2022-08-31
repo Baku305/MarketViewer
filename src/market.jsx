@@ -78,12 +78,14 @@ export function Market() {
       name: "Base Asset",
       selector: (row) => row.baseAsset,
       sortable: true,
+      hide : "sm"
     },
 
     {
       name: "Quote Asset",
       selector: (row) => row.quoteAsset,
       sortable: true,
+      hide : "sm"
     },
 
     {
@@ -150,10 +152,7 @@ export function Market() {
       return {
         value: symbol.baseAsset,
         label: (
-          <div className="flex h-5">
-            <img className="h-full pr-2" src={`//logo.chainbit.xyz/${symbol.baseAsset}`} alt="🉑" />
             <Link to={`/${symbol.baseAsset.toLowerCase()}`}>{symbol.baseAsset}</Link>
-          </div>
         ),
       };
     }),
@@ -180,7 +179,7 @@ export function Market() {
             <div className="h-full pl-6">
               <Select
                 isDisabled
-                className="w-48 h-full sm:text-sm rounded-md"
+                className="w-48 h-full text-sm rounded-md"
                 options={options}
                 placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
                 theme={(theme) => ({
