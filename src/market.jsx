@@ -24,7 +24,7 @@ export function Market() {
 
   const dispatch = useDispatch();
 
-  const location = useLocation()
+  const location = useLocation();
 
   const [filterText, setFilterText] = useState("");
 
@@ -144,13 +144,17 @@ export function Market() {
     },
   };
 
-
   const options = [
     { value: "ALL ASSETS", label: <Link to={`/`}>ALL BASE ASSETS</Link> },
     ...multiStore.getState().asset.map((symbol) => {
       return {
         value: symbol.baseAsset,
-        label: <Link to={`/${symbol.baseAsset.toLowerCase()}`}>{symbol.baseAsset}</Link>,
+        label: (
+          <div className="flex h-5">
+            <img className="h-full pr-2" src={`//logo.chainbit.xyz/${symbol.baseAsset}`} alt="🉑" />
+            <Link to={`/${symbol.baseAsset.toLowerCase()}`}>{symbol.baseAsset}</Link>
+          </div>
+        ),
       };
     }),
   ];
@@ -172,43 +176,45 @@ export function Market() {
               name="search"
             />
           </label>
-          {location.pathname === "/" ?  
-          <div className="h-full pl-6">
-            <Select
-              isDisabled
-              className="w-48 h-full sm:text-sm rounded-md"
-              options={options}
-              placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 0,
-                colors: {
-                  ...theme.colors,
-                  primary25: 'gray',
-                  primary: 'black',
-                },
-              })}
-            />
-          </div> : <div className="flex h-full pl-6">
-            <div className="pr-2">
-            <img className="h-10 w-10" src={`//logo.chainbit.xyz/${base_asset}`} alt=""/>
+          {location.pathname === "/" ? (
+            <div className="h-full pl-6">
+              <Select
+                isDisabled
+                className="w-48 h-full sm:text-sm rounded-md"
+                options={options}
+                placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 0,
+                  colors: {
+                    ...theme.colors,
+                    primary25: "gray",
+                    primary: "black",
+                  },
+                })}
+              />
             </div>
-            <Select
-              className="w-48 h-full sm:text-sm rounded-md"
-              options={options}
-              placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 0,
-                colors: {
-                  ...theme.colors,
-                  primary25: 'gray',
-                  primary: 'black',
-                },
-              })}
-            />
-          </div>
-          }
+          ) : (
+            <div className="flex h-full pl-6 items-center">
+              <div className="pr-2">
+                <img className="h-8 w-8" src={`//logo.chainbit.xyz/${base_asset}`} alt="" />
+              </div>
+              <Select
+                className="w-48 h-full sm:text-sm rounded-md"
+                options={options}
+                placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 0,
+                  colors: {
+                    ...theme.colors,
+                    primary25: "gray",
+                    primary: "black",
+                  },
+                })}
+              />
+            </div>
+          )}
         </div>
       </>
     );
