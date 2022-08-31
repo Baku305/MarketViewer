@@ -189,7 +189,10 @@ export function Market() {
                 },
               })}
             />
-          </div> : <div className="h-full pl-6">
+          </div> : <div className="flex h-full pl-6">
+            <div className="pr-2">
+            <img className="h-10 w-10" src={`//logo.chainbit.xyz/${base_asset}`} alt=""/>
+            </div>
             <Select
               className="w-48 h-full sm:text-sm rounded-md"
               options={options}

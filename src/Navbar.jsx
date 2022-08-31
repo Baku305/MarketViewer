@@ -26,7 +26,7 @@ export function Navbar() {
             <div className=" hover:bg-slate-500 w-full h-full pr-10 pl-10 flex items-center">Markets</div>{" "}
           </Link>
           <Link to="/assets">
-            <div className=" hover:bg-slate-500 w-full h-full pr-10 pl-10 flex items-center">Assets</div>{" "}
+            <div className=" hover:bg-slate-500 w-full h-full pr-10 pl-10 flex items-center">Base Assets</div>{" "}
           </Link>
         </div>
     </div>
