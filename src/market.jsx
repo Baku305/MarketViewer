@@ -175,25 +175,7 @@ export function Market() {
               name="search"
             />
           </label>
-          {location.pathname === "/" ? (
-            <div className="h-full pl-6">
-              <Select
-                isDisabled
-                className="w-48 h-full text-sm rounded-md"
-                options={options}
-                placeholder={base_asset === "" ? "ALL BASE ASSETS" : base_asset.toUpperCase()}
-                theme={(theme) => ({
-                  ...theme,
-                  borderRadius: 0,
-                  colors: {
-                    ...theme.colors,
-                    primary25: "gray",
-                    primary: "black",
-                  },
-                })}
-              />
-            </div>
-          ) : (
+          {location.pathname !== "/" && (
             <div className="flex h-full pl-6 items-center">
               <div className="pr-2">
                 <img className="" src={`//logo.chainbit.xyz/${base_asset}`} alt="" />

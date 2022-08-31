@@ -105,7 +105,7 @@ export function Assets() {
 
   useEffect(() => {
     if (symbolsInfo) {
-      //dispatch(marketState.actions.set(symbolsInfo.symbols.filter((s) => s.status === "TRADING")));
+      dispatch(marketState.actions.set(symbolsInfo.symbols.filter((s) => s.status === "TRADING")));
       const a = symbolsInfo.symbols.map((s) => numberOfMarkets(s.baseAsset))
       dispatch(AssetState.actions.set(filteredArray(a)))
     }
