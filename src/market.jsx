@@ -197,7 +197,7 @@ export function Market() {
           ) : (
             <div className="flex h-full pl-6 items-center">
               <div className="pr-2">
-                <img className="h-8 w-8" src={`//logo.chainbit.xyz/${base_asset}`} alt="" />
+                <img className="" src={`//logo.chainbit.xyz/${base_asset}`} alt="" />
               </div>
               <Select
                 className="w-48 h-full sm:text-sm rounded-md"
